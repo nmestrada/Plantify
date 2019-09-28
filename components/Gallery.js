@@ -8,7 +8,8 @@ import {
     TouchableOpacity,
     CameraRoll,
     ScrollView,
-    Button
+    Button,
+    Image
     } from "react-native";
 
 export default class Gallery extends Component{
@@ -18,7 +19,7 @@ export default class Gallery extends Component{
             photos:[]
         }
     }
-        handleButtonPress = () => {
+        _handleButtonPress = () => {
             CameraRoll.getPhotos({
                 first: 20,
                 assetType: 'Photos',
