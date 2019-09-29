@@ -4,6 +4,7 @@ import { ExpoLinksView } from '@expo/samples';
 import MyPlants from '../components/MyPlants'
 import Gallery from '../components/Gallery'
 import CameraComp from '../components/Camera'
+import Camera from '../components/RNCamera'
 
 export default function LinksScreen() {
   return (

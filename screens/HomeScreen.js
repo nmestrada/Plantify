@@ -61,17 +61,11 @@ export default class HomeScreen extends Component {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}>
         <View style={styles.welcomeContainer}>
-          <Text>Welcome!</Text>
+          <Text style={styles.innerText}>Welcome!</Text>
         </View>
 
-        <TouchableHighlight disabled={this.props.buttonDisabled}>
-            <Button onClick={this.takePicture}disabled={this.props.buttonDisabled} title="Take a Picture" />
-        </TouchableHighlight>
       </ScrollView>
 
-        <View><Text>Take a picture!</Text>
-            <CameraComp/>
-        </View>
       </View>
   );}
 }
@@ -135,6 +129,13 @@ headerText:{
     flex: 1,
     backgroundColor: '#3e836d',
   },
+  innerText:{
+    fontSize: 20,
+    textAlign: "center",
+    margin: 10,
+    fontWeight: "bold",
+    color: '#fff'
+},
   developmentModeText: {
     marginBottom: 20,
     color: 'rgba(0,0,0,0.4)',
