@@ -18,7 +18,7 @@ npm install
 ```
 expo start
 ```
-in seperate terminal:
+in separate terminal:
 ```
 ngrok 8080
 ```
