@@ -1,16 +1,16 @@
 const express = require('express')
 const app = express()
-const port = 8080;
+const port = 8000;
 const morgan = require('morgan')
 const api_helper = require('../utils/getData')
 const apiPostReq = require('../utils/postReq')
 
 app.use(morgan('dev'))
-app.use(express.json({limit: '50mb', extended: true}))
-//app.use(express.urlencoded({ extended: true }))
+app.use(express.json({limit: '50mb', extended: true})) //had to change this property to send base64 image
+app.use(express.urlencoded({ extended: true }))
 
 
-app.get('/', (req, res) => res.send('Welcome to Make REST API Calls In Express!'))
+app.get('/', (req, res) => res.send('Hello There!'))
 
 app.get('/getAPIResponse', (req, res) => {
 	api_helper.make_API_call()
@@ -22,9 +22,8 @@ app.get('/getAPIResponse', (req, res) => {
 	})
 });
 app.post('/getAPIResponse', (req,res) => {
-    const filePath = req.body;
-    console.log(filePath)
-    apiPostReq.makePostReq(filePath)
+    const photo = req.body.photo;
+    apiPostReq.makePostReq(photo)
     .then(response => {
         res.json(response)
     })

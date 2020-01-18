@@ -4,73 +4,69 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import CameraScreen from '../screens/CameraScreen';
+import GalleryScreen from '../screens/GalleryScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
   default: {},
 });
 
-const HomeStack = createStackNavigator(
+const CameraStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    Camera: CameraScreen,
   },
   config
 );
 
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+CameraStack.navigationOptions = {
+  tabBarLabel: 'Camera',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      name={'ios-camera'}
     />
   ),
 };
 
-HomeStack.path = '';
+CameraStack.path = '';
 
-const LinksStack = createStackNavigator(
+const ExploreStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    Links: HomeScreen,
   },
   config
 );
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Camera',
+ExploreStack.navigationOptions = {
+  tabBarLabel: 'Explore',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+    <TabBarIcon focused={focused} name={'ios-information-circle'} />
   ),
 };
 
-LinksStack.path = '';
+ExploreStack.path = '';
 
-const SettingsStack = createStackNavigator(
+const PlantStack = createStackNavigator(
   {
-    Settings: SettingsScreen,
+    Settings: GalleryScreen,
   },
   config
 );
 
-SettingsStack.navigationOptions = {
+PlantStack.navigationOptions = {
   tabBarLabel: 'MyPlants',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+    <TabBarIcon focused={focused} name={'ios-leaf'} />
   ),
 };
 
-SettingsStack.path = '';
+PlantStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
+  CameraStack,
+  ExploreStack,
+  PlantStack,
 });
 
 tabNavigator.path = '';

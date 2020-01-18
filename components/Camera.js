@@ -1,6 +1,8 @@
 import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import React , {Component} from 'react'
+import {addPlant} from '../redux/store'
+import {connect} from 'react-redux'
 import {
     Image,
     Platform,
@@ -15,13 +17,14 @@ import {
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 
-export default class CameraComp extends Component {
+class CameraComp extends Component {
     constructor() {
         super();
         this.state = {
             hasCameraPermission: null,
             type: Camera.Constants.Type.back,
-            photo: ''
+            photo: '',
+            id: 0
           }
     }
     async componentDidMount() {
@@ -36,25 +39,38 @@ export default class CameraComp extends Component {
             exif: true};
             await this.camera.takePictureAsync(options).then(photo => {
                 photo.exif.Orientation = 1;            
-                console.log(photo.uri);
                 this.setState({
-                    photo: photo.uri
-                })          
-            });   
+                    photo: photo,
+                    id: ++this.state.id
+                });
+            });
         }
-        await this.identifyPlant(this.state.photo); 
-        
+        let photo = this.state.photo.uri;
+        let id = this.state.id;
+        let plantInfo = await this.identifyPlant(this.state.photo.base64); 
+        this.props.addPlant({id, photo, plantInfo})
     }
     async identifyPlant(photo) {
         try{
-            const {data} = await axios.post('https://2b8df552.ngrok.io/getAPIResponse', `${photo}`);
-            console.log('identify plant!', data);
+            const {data} = await axios.post('https://07c0205f.ngrok.io/getAPIResponse', {photo: photo});
+            console.log(typeof data);
+            let prediction = this.sortResults(data);
             Alert.alert(
-                'Hello'
+                'Your Plant is:',
+                prediction
               );
+            return prediction;
         }catch(err){
             console.log(err)
         } 
+    }
+    sortResults = (data) => {
+        const tagsArr = data.result.tags;
+        const resultArr = tagsArr.map(tag => {
+            if(tag.confidence >50)
+            return tag.tag.en;
+        });
+        return resultArr.join(' ');
     }
     render() {
         return (
@@ -108,3 +124,11 @@ const styles = StyleSheet.create({
 		
 	}
 });
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addPlant: (photo) => dispatch(addPlant(photo))
+    };
+};
+
+export default connect(null, mapDispatchToProps)(CameraComp)

@@ -11,48 +11,39 @@ import {
   View,
   Button,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  TouchableHighlightBase
 } from 'react-native';
+import Layout from '../constants/Layout'
 import * as Permissions from 'expo-permissions';
 // import { Camera } from 'expo-camera';
 import CameraComp from '../components/Camera'
 import {RNCamera} from 'react-native-camera'
-
+// import ImagePicker from 'react-native-image-picker'
 import { MonoText } from '../components/StyledText';
 
 export default class HomeScreen extends Component {
     constructor(props){
 		super(props);
         this.state = { 
-			identifedAs: '',
+			photo: null,
 			loading: false
 		}
     }
-    takePicture = async function(){
-		
-		if (this.camera) {
+    // handleChoosePhoto = () => {
+    //     const options = {
+    //       noData: true,
+    //     }
+    //     ImagePicker.launchImageLibrary(options, response => {
+    //       if (response.uri) {
+    //         this.setState({ photo: response })
+    //       }
+    //     })
+    // }    
 
-			// Pause the camera's preview
-			this.camera.pausePreview();
-            
-            // Set the activity indicator
-			this.setState((previousState, props) => ({
-				loading: true
-			}));
-			
-			// Set options
-			const options = {
-                base64: true
-            };
-			
-			// Get the base64 version of the image
-			const data = await this.camera.takePictureAsync(options)
-			console.log(data)
-			// Get the identified image
-		}
-	}
-
- render() { return (
+ render() { 
+     const {photo} = this.state;
+     return (
     <View style={styles.container}>
      <View style={styles.header}>
          <Text style={styles.headerText}>Plantify</Text>
@@ -61,8 +52,31 @@ export default class HomeScreen extends Component {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}>
         <View style={styles.welcomeContainer}>
-          <Text style={styles.innerText}>Welcome!</Text>
+          <Text style={styles.innerText}>Choose photo to Identify</Text>
         </View>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        {photo && (
+          <Image
+            source={{ uri: photo.uri }}
+            style={{ width: 100, height: 100 }}
+          />
+        )}
+        <TouchableOpacity style={styles.button}>
+            <Button  title="Upload" />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.container}>
+          <Text>Useful Links:</Text>
+      </View>
+      <View>
+        <TouchableHighlight 
+            onPress={() => LinkingIOS.openURL('https://www.audubon.org/native-plants/search?zipcode=60626')}>
+          <Image 
+            source={{uri:'https://www.audubon.org/sites/default/files/styles/native_plant_desktop/public/native_plants/amelanchier_laevis_dan_mullen.jpg'}}
+            style={{width: window.width, height: 100}}
+          />
+        </TouchableHighlight>
+      </View>
 
       </ScrollView>
 
@@ -217,5 +231,15 @@ headerText:{
   helpLinkText: {
     fontSize: 14,
     color: '#2e78b7',
+  },
+  button: {
+    backgroundColor: '#0c381f',
+    borderRadius: 12,
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+    overflow: 'hidden',
+    padding: 12,
+    textAlign:'center',
   },
 });

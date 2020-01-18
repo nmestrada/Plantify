@@ -11,41 +11,28 @@ import {
     Button,
     Image
     } from "react-native";
+import { FileSystem, MediaLibrary, Permissions } from 'expo';
+import {connect} from 'react-redux'
 
-export default class Gallery extends Component{
-    constructor() {
-        super()
-        this.state={
-            photos:[]
-        }
-    }
-        _handleButtonPress = () => {
-            CameraRoll.getPhotos({
-                first: 20,
-                assetType: 'Photos',
-              })
-              .then(r => {
-                this.setState({ photos: r.edges });
-              })
-              .catch((err) => {
-                 console.log(err)
-              });
-            };
+//const PHOTOS_DIR = FileSystem.documentDirectory + 'photos';
+
+class Gallery extends Component{
          render() {
           return (
             <View>
-              <Button title="Load Images" onPress={this._handleButtonPress} />
               <ScrollView>
-                {this.state.photos.map((p, i) => {
+                {this.props.plants.map((plant, i) => {
                 return (
-                  <Image
-                    key={i}
-                    style={{
-                      width: 300,
-                      height: 100,
-                    }}
-                    source={{ uri: p.node.image.uri }}
-                  />
+                <View key={plant.id} style={{flex: 1, flexDirection: 'row'}}>
+                    <Image
+                      style={{
+                        width: 150,
+                        height: 100,
+                      }}
+                      source={{ uri:plant.photo}}
+                    />
+                    <Text>{plant.plantInfo}</Text>
+                </View>
                 );
               })}
               </ScrollView>
@@ -53,3 +40,10 @@ export default class Gallery extends Component{
           );
          }
 }
+
+const mapStateToProps = state => {
+    return {
+        plants: state
+    }
+}
+export default connect(mapStateToProps)(Gallery)

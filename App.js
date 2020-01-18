@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import MyPlants from './components/MyPlants'
+import {Provider} from 'react-redux'
+import store from './redux/store'
 
 import AppNavigator from './navigation/AppNavigator';
 
@@ -21,10 +23,12 @@ export default function App(props) {
     );
   } else {
     return (
+    <Provider store={store}>
       <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" backgroundColor="#003114" />}
         <AppNavigator />
       </View>
+      </Provider>
     );
   }
 }
@@ -58,6 +62,6 @@ function handleFinishLoading(setLoadingComplete) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
   },
 });
