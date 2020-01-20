@@ -42,36 +42,43 @@ const styles = StyleSheet.create({
 });
 
 
-const Gallery = (props) => {
-    console.log('in Gallery Component', props.plants)
+class Gallery extends Component{
+    async componentDidMount() {
+        let result = await CameraRoll.getPhotos({
+            first: 20,
+            assetType: 'All'
+          })
+        //console.log(result)
+    }
+    render(){
+    console.log('in Gallery Component', this.props.plants)
     return (
     <View style={styles.container}>
         <Header style={styles.header}>
             <Left style={{flex:1}}>
-                <Icon name="menu" onPress={() => props.navigation.openDrawer()}/>
+                <Icon name="menu" onPress={() => this.props.navigation.openDrawer()}/>
             </Left>
             <Body style={{justifyContent: "center", flex:1, flexGrow: 2}}>
                 <Title style={styles.headerText}>Images</Title>
             </Body>
             <Right style={{flex:1}}/>
         </Header>
-    {props.plants.length? 
-    <ScrollView>
-    {props.plants.map((plant, i) => {
-    return (
-    <View key={plant.plantInfo} style={{flex: 1, flexDirection: 'row'}}>
-        <CacheImage uri={plant.photo}/>
-        <Text>{plant.plantInfo}</Text>
-    </View>
-    );
-    })}
-    </ScrollView> :
-    <View >
-        <Text>No Plants Yet!</Text>
-    </View>
+    {this.props.plants.length? 
+        <ScrollView>
+        {this.props.plants.map( plant => (
+        <View key={plant.plantInfo} style={{flex: 1, flexDirection: 'row'}}>
+            <CacheImage uri={plant.photo}/>
+            <Text>{plant.plantInfo}</Text>
+        </View>
+        ))}
+        </ScrollView> :
+        <View >
+            <Text>No Plants Yet!</Text>
+            {/* <Image source={`${FileSystem.cacheDirectory}Z2fU2GF.jpg`}/> */}
+        </View>
     }
     </View>
-    );
+    )}
 }
 
 const mapStateToProps = state => {

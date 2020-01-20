@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, CameraRoll} from 'react-native';
 import shorthash from 'shorthash';
 import * as FileSystem from 'expo-file-system';
 
@@ -31,6 +31,7 @@ export default class CacheImage extends React.Component {
           uri: image.uri,
         },
       });
+      console.log('image uri',this.state.source)
       return;
     }
 
@@ -41,6 +42,12 @@ export default class CacheImage extends React.Component {
         uri: newImage.uri,
       },
     });
+    //CameraRoll.saveToCameraRoll(newImage.uri, 'photo')
+    let response = await FileSystem.copyAsync({
+        from: newImage.uri,
+        to: path +'.jpg'
+    })
+    console.log('copyAsync repsonse', response)
   };
 
   render() {
