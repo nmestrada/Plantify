@@ -12,5 +12,5 @@ export default function SettingsScreen() {
 }
 
 SettingsScreen.navigationOptions = {
-  title: 'Your saved Plants',
+  title: 'Gallery',
 };

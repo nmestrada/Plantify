@@ -13,7 +13,7 @@ export default function LinksScreen() {
 }
 
 LinksScreen.navigationOptions = {
-  title: 'Take a picture of your plant',
+  title: 'Camera',
 };
 
 const styles = StyleSheet.create({
