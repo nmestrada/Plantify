@@ -15,10 +15,11 @@ import {
     Alert
   } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { Header, Left, Icon, Body, Title, Right} from 'native-base'
 import axios from 'axios';
 
 class CameraComp extends Component {
-    constructor() {
+    constructor(props) {
         super();
         this.state = {
             hasCameraPermission: null,
@@ -75,6 +76,15 @@ class CameraComp extends Component {
     render() {
         return (
         <View style={{ flex: 1 }}>
+            <Header style={styles.header}>
+                <Left style={{flex:1}}>
+                    <Icon name="menu" onPress={() => this.props.navigation.openDrawer()}/>
+                </Left>
+                <Body style={{justifyContent: "center", flex:1, flexGrow: 2}}>
+                    <Title>Take a Picture!</Title>
+                </Body>
+                <Right style={{flex:1}}/>
+            </Header>
           <Camera style={{ flex: 1 }} ref={(ref) => {this.camera = ref}} type={this.state.type}>
             <View
               style={{
@@ -122,7 +132,13 @@ const styles = StyleSheet.create({
     },
 	captureButton: {
 		
-	}
+    },
+    header: {
+        backgroundColor: '#A5AA52',
+        fontSize: 22,
+        height: 80,
+        display: "flex",
+    },
 });
 
 const mapDispatchToProps = dispatch => {
