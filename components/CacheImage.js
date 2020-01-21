@@ -5,8 +5,10 @@ import * as FileSystem from 'expo-file-system';
 
 const styles = StyleSheet.create({
     image: {
-        height: 20,
-        width: 20,
+        height: 100,
+        width: 100,
+        borderRadius: 5,
+        margin: 5
     }
 })
 
@@ -51,7 +53,7 @@ export default class CacheImage extends React.Component {
   };
 
   render() {
-    return <Image style={{width: 150, height: 100}} source={this.state.source} />;
+    return <Image style={styles.image} source={this.state.source} />;
   }
 }
 

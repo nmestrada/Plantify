@@ -13,7 +13,12 @@ export const addPlant = (info)=> {
         info
     }
 }
-
+//thunk
+const addPlantThunk = (input) => {
+    //make a hash for each photo here, but then this goes away after each reload?
+    //uris also disappear after each reload
+    //this would be a temporary fix
+}
 
 const reducer = (state = [], action) => {
     switch(action.type){

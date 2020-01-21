@@ -22,32 +22,51 @@ import {
   } from 'react-native-responsive-screen';
 
 //import Layout from '../constants/Layout'
-//import * as Permissions from 'expo-permissions';
-// import { Camera } from 'expo-camera';
 //import CameraComp from '../components/Camera'
 //import {RNCamera} from 'react-native-camera'
 // import ImagePicker from 'react-native-image-picker'
 //import { MonoText } from '../components/StyledText';
 import { Header, Left, Icon, Body, Title, Right} from 'native-base'
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
+
 
 export default class HomeScreen extends Component {
     constructor(props){
 		super(props);
         this.state = { 
-			photo: null,
-			loading: false
+			photo: null
 		}
     }
-    // handleChoosePhoto = () => {
-    //     const options = {
-    //       noData: true,
-    //     }
-    //     ImagePicker.launchImageLibrary(options, response => {
-    //       if (response.uri) {
-    //         this.setState({ photo: response })
-    //       }
-    //     })
-    // }    
+    componentDidMount() {
+        this.getPermissionAsync();
+        console.log('hi');
+    }
+
+    getPermissionAsync = async () => {
+        if (Constants.platform.ios) {
+            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            if (status !== 'granted') {
+            alert('Sorry, we need camera roll permissions to make this work!');
+            }
+        }
+    }
+    handleChoosePhoto = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1
+          });
+      
+        console.log(result);
+    
+        if (!result.cancelled) {
+        this.setState({ image: result.uri });
+        }
+        this.props.navigation.navigate('Gallery')
+    }    
 
  render() { 
      return (
@@ -67,10 +86,10 @@ export default class HomeScreen extends Component {
         <View style={styles.welcomeContainer}>
           <Text style={styles.innerText}>Take or Upload a photo to id Plants</Text>
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={()=> this.props.navigation.navigate('Camera')}>
             <Text style= {styles.buttonText}>Take a Photo</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={()=> this.handleChoosePhoto()}>
         <Text style= {styles.buttonText}>Choose a Photo</Text>
         </TouchableOpacity>
       <View style={styles.container}>
@@ -144,7 +163,7 @@ headerText:{
     overflow: 'hidden',
     padding: 12,
     textAlign:'center',
-    width: hp('24%'),
+    width: wp('55%'),
     alignSelf: 'center',
     margin: 10,
   },

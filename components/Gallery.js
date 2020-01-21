@@ -39,6 +39,17 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontFamily: "AvenirNext-DemiBoldItalic"
     },
+    emptyText:{
+        fontSize: 30,
+        textAlign: "center",
+        fontWeight: "bold",
+        color: '#A5AA52',
+    },
+    innerText:{
+        fontSize: 15,
+        fontWeight: "bold",
+        color: '#A5AA52',
+    },
 });
 
 
@@ -60,22 +71,26 @@ class Gallery extends Component{
                 <Icon name="menu" onPress={() => this.props.navigation.openDrawer()}/>
             </Left>
             <Body style={{justifyContent: "center", flex:1, flexGrow: 2}}>
-                <Title style={styles.headerText}>Images</Title>
+                <Title style={styles.headerText}>Your Plants</Title>
             </Body>
             <Right style={{flex:1}}/>
         </Header>
     {this.props.plants.length? 
         <ScrollView>
         {this.props.plants.map( plant => (
-        <View key={plant.plantInfo} style={{flex: 1, flexDirection: 'row'}}>
+        <View key={plant.plantInfo} style={{flex: 1, flexDirection: 'row', margin: 10}}>
             <CacheImage uri={plant.photo}/>
-            <Text>{plant.plantInfo}</Text>
+            <View style={{flexDirection:'column'}}>
+                <Text style={styles.innerText}>Plant Family: {plant.plantInfo}</Text>
+                <Text style={styles.innerText}>Plant Species: Unknown</Text>
+                <Text style={styles.innerText}>Date Taken: Now</Text>
+            </View>
         </View>
         ))}
         </ScrollView> :
         <View >
-            <Text>No Plants Yet!</Text>
-            {/* <Image source={{uri: 'file:///var/mobile/Containers/Data/Application/89477697-5FE3-40A0-870F-DD756C0835A3/Library/Caches/ExponentExperienceData/%2540nmestrad%252FPlantr/Z2m3JES.jpg'}}/> */}
+            <Text style={styles.emptyText}>No Plants Yet!</Text>
+            <Image style={{width:100, height: 100}} source={{uri: 'file:///var/mobile/Containers/Data/Application/89477697-5FE3-40A0-870F-DD756C0835A3/Library/Caches/ExponentExperienceData/%2540nmestrad%252FPlantr/Z2m3JES.jpg'}}/>
         </View>
     }
     </View>
