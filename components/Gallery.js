@@ -53,6 +53,12 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: '#A5AA52',
     },
+    image: {
+        height: 100,
+        width: 100,
+        borderRadius: 5,
+        margin: 5
+    }
 });
 
 
@@ -70,8 +76,6 @@ class Gallery extends Component{
         })
     }
     render(){
-    console.log('in Gallery Component', this.props.plants)
-    console.log(FileSystem.documentDirectory)
     return (
     <View style={styles.container}>
         <Header style={styles.header}>
@@ -87,10 +91,9 @@ class Gallery extends Component{
         <ScrollView>
         {this.state.photos.map( photo => (
         <View key={photo.uri} style={{flex: 1, flexDirection: 'row', margin: 10}}>
-            <CacheImage uri={photo.uri}/>
+            <Image style={styles.image} source={{uri: photo.uri}} />
             <View style={{flexDirection:'column'}}>
-                <Text style={styles.innerText}>Plant Family: Replace with real data</Text>
-                <Text style={styles.innerText}>Plant Species: Unknown</Text>
+        <Text style={styles.innerText}>Plant Family: {photo.family}</Text>
                 <Text style={styles.innerText}>Date Taken: Now</Text>
             </View>
         </View>

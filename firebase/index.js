@@ -11,11 +11,11 @@ const db = firebase.firestore();
 export default db;
 
 //adds an image under a user , default user user1
-export async function addImageToDB(imageUri) {
+export async function addImageToDB(info) {
     try {
       const imageFolder = db
         .collection('Images')
-      await imageFolder.add({uri: imageUri});
+      await imageFolder.add(info);
       //or we can use add  instead of set to generate an doc id
       console.log('img uri was added!');
       //return newPlaylist?

@@ -47,11 +47,6 @@ export default class CacheImage extends React.Component {
       },
     });
     await addImageToDB(newImage.uri)
-    //CameraRoll.saveToCameraRoll(newImage.uri, 'photo')
-    // let response = await FileSystem.copyAsync({
-    //     from: newImage.uri,
-    //     to: path +'.jpg'
-    // })
     console.log(newImage.uri)
   };
 

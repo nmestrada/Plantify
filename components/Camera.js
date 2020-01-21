@@ -16,10 +16,13 @@ import {
   } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Header, Left, Icon, Body, Title, Right, Spinner} from 'native-base'
-import axios from 'axios';
+import * as FileSystem from 'expo-file-system';
+import shorthash from 'shorthash';
+import {addImageToDB} from '../firebase/index'
 
 //Clarifai 
 import Clarifai from 'clarifai'
+import MyPlants from './MyPlants';
 
 class CameraComp extends Component {
     constructor(props) {
@@ -49,25 +52,23 @@ class CameraComp extends Component {
                 });
             });
         }
-        let photo = this.state.photo.uri;
-        let id = this.state.id;
-        let plantInfo = await this.identifyImage(this.state.photo.base64);
-        this.props.addPlant({photo, plantInfo})
+        let uri = this.state.photo.uri;
+        let family = await this.identifyImage(this.state.photo.base64);
+        await this.cacheImage(uri, family)
+        //this used to add to redux
+        //this.props.addPlant({photo, plantInfo})
     }
-    // async identifyPlant(photo) {
-    //     try{
-    //         const {data} = await axios.post('https://07c0205f.ngrok.io/getAPIResponse', {photo: photo});
-    //         console.log(typeof data);
-    //         let prediction = this.sortResults(data);
-    //         Alert.alert(
-    //             'Your Plant is:',
-    //             prediction
-    //           );
-    //         return prediction;
-    //     }catch(err){
-    //         console.log(err)
-    //     } 
-    // }
+    async cacheImage(uri, family) {
+        const name = shorthash.unique(uri);
+        console.log(name);
+        const path = `${FileSystem.documentDirectory}${name}.jpg`; 
+        //add new image to fileSystem
+        console.log('downloading image to cache');
+        const newImage = await FileSystem.downloadAsync(uri, path);
+        //add new image to firebase
+        await addImageToDB({uri: newImage.uri, family: family})
+        console.log('image added to firebase')
+    }
     async identifyImage(imageData){
 
 		// Initialise Clarifai api

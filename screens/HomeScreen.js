@@ -41,7 +41,6 @@ export default class HomeScreen extends Component {
     }
     componentDidMount() {
         this.getPermissionAsync();
-        console.log('hi');
     }
 
     getPermissionAsync = async () => {
