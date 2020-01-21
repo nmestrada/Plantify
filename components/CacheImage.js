@@ -2,6 +2,8 @@ import React from 'react';
 import { Image, StyleSheet, CameraRoll} from 'react-native';
 import shorthash from 'shorthash';
 import * as FileSystem from 'expo-file-system';
+//firebase functions
+import {addImageToDB} from '../firebase/index'
 
 const styles = StyleSheet.create({
     image: {
@@ -44,6 +46,7 @@ export default class CacheImage extends React.Component {
         uri: newImage.uri,
       },
     });
+    await addImageToDB(newImage.uri)
     //CameraRoll.saveToCameraRoll(newImage.uri, 'photo')
     // let response = await FileSystem.copyAsync({
     //     from: newImage.uri,

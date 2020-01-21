@@ -9,7 +9,7 @@ import {
     CameraRoll,
     ScrollView,
     Button,
-    Image
+    Image,
     } from "react-native";
 //import { FileSystem, MediaLibrary, Permissions } from 'expo';
 import { Header, Left, Icon, Body, Title, Right} from 'native-base'
@@ -18,6 +18,9 @@ import {connect} from 'react-redux'
 //image stuff
 import CacheImage from './CacheImage';
 import * as FileSystem from 'expo-file-system';
+
+//firebase functions
+import {getImages} from '../firebase/index'
 
 //const PHOTOS_DIR = FileSystem.documentDirectory + 'photos';
 const styles = StyleSheet.create({
@@ -54,12 +57,17 @@ const styles = StyleSheet.create({
 
 
 class Gallery extends Component{
+    constructor(){
+        super();
+        this.state = {
+            photos: []
+        }
+    }
     async componentDidMount() {
-        let result = await CameraRoll.getPhotos({
-            first: 20,
-            assetType: 'All'
-          })
-        //console.log(result)
+        let result = await getImages();
+        this.setState({
+            photos: result
+        })
     }
     render(){
     console.log('in Gallery Component', this.props.plants)
@@ -75,13 +83,13 @@ class Gallery extends Component{
             </Body>
             <Right style={{flex:1}}/>
         </Header>
-    {this.props.plants.length? 
+    {this.state.photos.length? 
         <ScrollView>
-        {this.props.plants.map( plant => (
-        <View key={plant.plantInfo} style={{flex: 1, flexDirection: 'row', margin: 10}}>
-            <CacheImage uri={plant.photo}/>
+        {this.state.photos.map( photo => (
+        <View key={photo.uri} style={{flex: 1, flexDirection: 'row', margin: 10}}>
+            <CacheImage uri={photo.uri}/>
             <View style={{flexDirection:'column'}}>
-                <Text style={styles.innerText}>Plant Family: {plant.plantInfo}</Text>
+                <Text style={styles.innerText}>Plant Family: Replace with real data</Text>
                 <Text style={styles.innerText}>Plant Species: Unknown</Text>
                 <Text style={styles.innerText}>Date Taken: Now</Text>
             </View>
@@ -90,7 +98,6 @@ class Gallery extends Component{
         </ScrollView> :
         <View >
             <Text style={styles.emptyText}>No Plants Yet!</Text>
-            <Image style={{width:100, height: 100}} source={{uri: 'file:///var/mobile/Containers/Data/Application/89477697-5FE3-40A0-870F-DD756C0835A3/Library/Caches/ExponentExperienceData/%2540nmestrad%252FPlantr/Z2m3JES.jpg'}}/>
         </View>
     }
     </View>
