@@ -22,7 +22,7 @@ export default class CacheImage extends React.Component {
     const { uri } = this.props;
     const name = shorthash.unique(uri);
     console.log(name);
-    const path = `${FileSystem.cacheDirectory}${name}`;
+    const path = `${FileSystem.documentDirectory}${name}.jpg`;
     const image = await FileSystem.getInfoAsync(path);
     if (image.exists) {
       console.log('read image from cache');
@@ -43,11 +43,11 @@ export default class CacheImage extends React.Component {
       },
     });
     //CameraRoll.saveToCameraRoll(newImage.uri, 'photo')
-    let response = await FileSystem.copyAsync({
-        from: newImage.uri,
-        to: path +'.jpg'
-    })
-    console.log('copyAsync repsonse', response)
+    // let response = await FileSystem.copyAsync({
+    //     from: newImage.uri,
+    //     to: path +'.jpg'
+    // })
+    console.log(newImage.uri)
   };
 
   render() {

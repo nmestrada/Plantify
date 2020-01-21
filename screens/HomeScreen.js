@@ -50,12 +50,8 @@ export default class HomeScreen extends Component {
     // }    
 
  render() { 
-     const {photo} = this.state;
      return (
     <View style={styles.container}>
-     {/* <View style={styles.header}>
-         <Text style={styles.headerText}>Plantify</Text>
-     </View> */}
      <Header style={styles.header}>
          <Left style={{flex:1}}>
              <Icon name="menu" onPress={() => this.props.navigation.openDrawer()}/>
@@ -69,28 +65,32 @@ export default class HomeScreen extends Component {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}>
         <View style={styles.welcomeContainer}>
-          <Text style={styles.innerText}>Choose photo to Identify</Text>
+          <Text style={styles.innerText}>Take or Upload a photo to id Plants</Text>
         </View>
         <TouchableOpacity style={styles.button}>
-            <Text style= {styles.buttonText}>Upload</Text>
+            <Text style= {styles.buttonText}>Take a Photo</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
         <Text style= {styles.buttonText}>Choose a Photo</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-        <Text style= {styles.buttonText}>Gallery</Text>
-        </TouchableOpacity>
       <View style={styles.container}>
-          <Text>Useful Links:</Text>
+          <Text style={styles.innerText}>Native Plants in Your Area!</Text>
       </View>
       <View>
         <TouchableHighlight 
-            onPress={() => LinkingIOS.openURL('https://www.audubon.org/native-plants/search?zipcode=60626')}>
+            onPress={() => handleLearnMorePress()}>
           <Image 
             source={{uri:'https://www.audubon.org/sites/default/files/styles/native_plant_desktop/public/native_plants/amelanchier_laevis_dan_mullen.jpg'}}
             style={{width: window.width, height: 100}}
           />
         </TouchableHighlight>
+      </View>
+      <View style={styles.container}>
+          <Text style={styles.innerText}>Plant of the Day!</Text>
+          <Image 
+            source={{uri:'https://farm8.staticflickr.com/7019/6513774775_bfe89cb120.jpg'}}
+            style={{width: window.width, height: 100}}
+          />
       </View>
 
       </ScrollView>
@@ -101,11 +101,11 @@ export default class HomeScreen extends Component {
 
 
 
-// function handleLearnMorePress() {
-//   WebBrowser.openBrowserAsync(
-//     'https://docs.expo.io/versions/latest/workflow/development-mode/'
-//   );
-// }
+function handleLearnMorePress() {
+  WebBrowser.openBrowserAsync(
+    'https://www.audubon.org/native-plants/search?zipcode=60626'
+  );
+}
 
 
 const styles = StyleSheet.create({
@@ -130,51 +130,12 @@ headerText:{
   innerText:{
     fontSize: 20,
     textAlign: "center",
-    margin: 10,
     fontWeight: "bold",
-    color: '#fff'
+    color: '#A5AA52',
+    margin:10,
 },
   contentContainer: {
     paddingTop: 30,
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
   },
   button: {
     backgroundColor: '#DBF4AD',
@@ -184,7 +145,8 @@ headerText:{
     padding: 12,
     textAlign:'center',
     width: hp('24%'),
-    alignSelf: 'center'
+    alignSelf: 'center',
+    margin: 10,
   },
   buttonText:{
     color: '#000',

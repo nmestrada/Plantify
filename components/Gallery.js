@@ -52,6 +52,7 @@ class Gallery extends Component{
     }
     render(){
     console.log('in Gallery Component', this.props.plants)
+    console.log(FileSystem.documentDirectory)
     return (
     <View style={styles.container}>
         <Header style={styles.header}>
@@ -74,7 +75,7 @@ class Gallery extends Component{
         </ScrollView> :
         <View >
             <Text>No Plants Yet!</Text>
-            {/* <Image source={`${FileSystem.cacheDirectory}Z2fU2GF.jpg`}/> */}
+            {/* <Image source={{uri: 'file:///var/mobile/Containers/Data/Application/89477697-5FE3-40A0-870F-DD756C0835A3/Library/Caches/ExponentExperienceData/%2540nmestrad%252FPlantr/Z2m3JES.jpg'}}/> */}
         </View>
     }
     </View>
