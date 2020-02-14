@@ -6,14 +6,14 @@ import Gallery from '../components/Gallery'
 import CameraComp from '../components/Camera'
 import Camera from '../components/RNCamera'
 
-export default function LinksScreen() {
+export default function CameraScreen(props) {
   return (
-      <CameraComp/>
+      <CameraComp {...props}/>
   );
 }
 
-LinksScreen.navigationOptions = {
-  title: 'Take a picture of your plant',
+CameraScreen.navigationOptions = {
+  title: 'Camera',
 };
 
 const styles = StyleSheet.create({

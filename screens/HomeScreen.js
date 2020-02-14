@@ -14,68 +14,101 @@ import {
   ActivityIndicator,
   TouchableHighlightBase
 } from 'react-native';
-import Layout from '../constants/Layout'
-import * as Permissions from 'expo-permissions';
-// import { Camera } from 'expo-camera';
-import CameraComp from '../components/Camera'
-import {RNCamera} from 'react-native-camera'
+//responsive variables
+
+import {
+    heightPercentageToDP as hp,
+    widthPercentageToDP as wp
+  } from 'react-native-responsive-screen';
+
+//import Layout from '../constants/Layout'
+//import CameraComp from '../components/Camera'
+//import {RNCamera} from 'react-native-camera'
 // import ImagePicker from 'react-native-image-picker'
-import { MonoText } from '../components/StyledText';
+//import { MonoText } from '../components/StyledText';
+import { Header, Left, Icon, Body, Title, Right} from 'native-base'
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
+
 
 export default class HomeScreen extends Component {
     constructor(props){
 		super(props);
         this.state = { 
-			photo: null,
-			loading: false
+			photo: null
 		}
     }
-    // handleChoosePhoto = () => {
-    //     const options = {
-    //       noData: true,
-    //     }
-    //     ImagePicker.launchImageLibrary(options, response => {
-    //       if (response.uri) {
-    //         this.setState({ photo: response })
-    //       }
-    //     })
-    // }    
+    componentDidMount() {
+        this.getPermissionAsync();
+    }
+
+    getPermissionAsync = async () => {
+        if (Constants.platform.ios) {
+            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            if (status !== 'granted') {
+            alert('Sorry, we need camera roll permissions to make this work!');
+            }
+        }
+    }
+    handleChoosePhoto = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1
+          });
+      
+        console.log(result);
+    
+        if (!result.cancelled) {
+        this.setState({ image: result.uri });
+        }
+        this.props.navigation.navigate('Gallery')
+    }    
 
  render() { 
-     const {photo} = this.state;
      return (
     <View style={styles.container}>
-     <View style={styles.header}>
-         <Text style={styles.headerText}>Plantify</Text>
-     </View>
+     <Header style={styles.header}>
+         <Left style={{flex:1}}>
+             <Icon name="menu" onPress={() => this.props.navigation.openDrawer()}/>
+         </Left>
+         <Body style={{justifyContent: "center", flex:1, flexGrow: 2}}>
+            <Title style={styles.headerText}>Plantify</Title>
+        </Body>
+        <Right style={{flex:1}}/>
+     </Header>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}>
         <View style={styles.welcomeContainer}>
-          <Text style={styles.innerText}>Choose photo to Identify</Text>
+          <Text style={styles.innerText}>Take or Upload a photo to id Plants</Text>
         </View>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        {photo && (
-          <Image
-            source={{ uri: photo.uri }}
-            style={{ width: 100, height: 100 }}
-          />
-        )}
-        <TouchableOpacity style={styles.button}>
-            <Button  title="Upload" />
+        <TouchableOpacity style={styles.button} onPress={()=> this.props.navigation.navigate('Camera')}>
+            <Text style= {styles.buttonText}>Take a Photo</Text>
         </TouchableOpacity>
-      </View>
+        <TouchableOpacity style={styles.button} onPress={()=> this.handleChoosePhoto()}>
+        <Text style= {styles.buttonText}>Choose a Photo</Text>
+        </TouchableOpacity>
       <View style={styles.container}>
-          <Text>Useful Links:</Text>
+          <Text style={styles.innerText}>Native Plants in Your Area!</Text>
       </View>
       <View>
         <TouchableHighlight 
-            onPress={() => LinkingIOS.openURL('https://www.audubon.org/native-plants/search?zipcode=60626')}>
+            onPress={() => handleLearnMorePress()}>
           <Image 
             source={{uri:'https://www.audubon.org/sites/default/files/styles/native_plant_desktop/public/native_plants/amelanchier_laevis_dan_mullen.jpg'}}
             style={{width: window.width, height: 100}}
           />
         </TouchableHighlight>
+      </View>
+      <View style={styles.container}>
+          <Text style={styles.innerText}>Plant of the Day!</Text>
+          <Image 
+            source={{uri:'https://farm8.staticflickr.com/7019/6513774775_bfe89cb120.jpg'}}
+            style={{width: window.width, height: 100}}
+          />
       </View>
 
       </ScrollView>
@@ -84,162 +117,59 @@ export default class HomeScreen extends Component {
   );}
 }
 
-HomeScreen.navigationOptions = {
-  header: null,
-};
 
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use
-        useful development tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
 
 function handleLearnMorePress() {
   WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/development-mode/'
+    'https://www.audubon.org/native-plants/search?zipcode=60626'
   );
 }
 
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes'
-  );
-}
 
 const styles = StyleSheet.create({
 header: {
-    backgroundColor: '#003114',
-    flexDirection: 'column',
-    textAlign: 'center',
+    backgroundColor: '#A5AA52',
     fontSize: 22,
-    marginTop: 20,
-    height: 50,
+    height: 80,
+    display: "flex",
 },
 headerText:{
-    fontSize: 20,
+    fontSize: 22,
     textAlign: "center",
     margin: 10,
     fontWeight: "bold",
-    color: '#fff'
+    color: '#fff',
+    fontFamily: "AvenirNext-DemiBoldItalic"
 },
   container: {
     flex: 1,
-    backgroundColor: '#3e836d',
+    backgroundColor: '#fff',
   },
   innerText:{
     fontSize: 20,
     textAlign: "center",
-    margin: 10,
     fontWeight: "bold",
-    color: '#fff'
+    color: '#A5AA52',
+    margin:10,
 },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
   contentContainer: {
     paddingTop: 30,
   },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
   button: {
-    backgroundColor: '#0c381f',
+    backgroundColor: '#DBF4AD',
     borderRadius: 12,
-    color: 'white',
-    fontSize: 24,
-    fontWeight: 'bold',
+    color: '#fff',
     overflow: 'hidden',
     padding: 12,
     textAlign:'center',
+    width: wp('55%'),
+    alignSelf: 'center',
+    margin: 10,
   },
+  buttonText:{
+    color: '#000',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  }
 });
