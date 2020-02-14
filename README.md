@@ -18,19 +18,16 @@ npm install
 ```
 expo start
 ```
-in separate terminal:
-```
-ngrok 8080
-```
+
 If all goes well you should have the app up on expo
 
 
 ## Built With
 
 * React Native
-* Sequelize
-* PostGreSQL
-* Express
+* Clarifai API
+* Redux
+* Google Firebase
 
 ## Authors
 
